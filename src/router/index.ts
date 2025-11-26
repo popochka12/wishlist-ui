@@ -8,7 +8,6 @@ import WishlistDetail from '../components/WishlistDetail.vue'
 import Welcome from '../components/Welcome.vue'
 import { useAuthStore } from '../store/auth'
 
-// Define routes array type
 const routes: Array<RouteRecordRaw> = [
 //   { path: '/', component: Wishlists, meta: { requiresAuth: true } },
   { path: '/', component: Welcome },
@@ -25,11 +24,9 @@ const router = createRouter({
   routes,
 })
 
-// Navigation guard for auth
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const auth = useAuthStore()
 
-  // If token exists but user is not loaded, fetch user
   if (!auth.user && auth.token) {
     try {
       await auth.fetchUser()
@@ -38,7 +35,6 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  // Redirect to login if route requires auth and user is not logged in
   if (to.meta.requiresAuth && !auth.user) {
     return next('/login')
   }
